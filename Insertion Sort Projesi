@@ -3,15 +3,32 @@ Proje 1
 
 Yukarı verilen dizinin sort türüne göre aşamalarını yazınız.
 
-Ders içeriğinde Insertion Sort anlatılmadı. Ama burada kendi araştırmalarımla anladığım kadarıyla Insertion Sort'un ne yapacağını belirtmeye çalışacağım. 
+Ders içeriğinde Selection Sort konu başlığında Insertion Sort anlatılıyor. Insertion Sort için araştırdığım hiçbir kaynak, önce array'in tamamına bakılıp, en kücük 
+elemanın en başa yazılıp sorted kabul edilip bu şekilde 2., 3. elemanlara bakarak ilerleyeceğini söylemiyor, aksine sitedeki anlatım bu şekilde.
+Karmaşıklığımı yenmek adına farklı kaynaklardan Selection Sort ve Insertion Sort örneklerine çalıştım. Burada, bu kaynaklardan öğrendiğim kadar soruyu yanıtlamaya
+çabalayacağım.
 
-[2,27,16,22,18,6]
-[2,6,16,22,18,27]
-[2,6,16,18,22,27]
+Insertion sort, bir kart oyununda elimize teker teker dağıtılan kartları, her gelen büyük kartı elimizin altına, büyüğü üste koymamız gibi düşünülebilir.
+İlk eleman sorted kabul edilir, II. eleman key, sorted elemanla kıyaslanır. 
+İlk eleman (sorted eleman) key'den daha büyükse key onun önüne, küçükse arkasına yazılır.
+[22,27,16,2,18,6]
+[22,27,16,2,18,6] -- 22 sorted, 27 ile kıyaslandı, 27 doğru yerde. 
+[16,22,27,2,18,6] -- 22 ve 27 sorted, 16 ikisinden de ufak, sorted elemanlar birer sağa kaydırıldı, 16 açılan boşluğa getirildi ve o da sorted kısma dahil edildi.
+[2,16,22,27,18,6] -- 16,22 ve 27 sorted, 2 hepsinden küçük, sorted elemanlar birer sağa  kaydırıldı ve açılan boşluğa 2 getirildi. (n-3)
+[2,16,18,22,27,6] -- 18, sortedlar arasında 16'dan büyük 22'den küçük, aralarına getirildi. ( n-4)
+[2,6,16,18,22,27] 
 
 Big-O gösterimini yazınız.
 
-n+ (n+1) + (n+2) + ... + 1 => [n.(n+1)] / 2 => (n^2 + n) / 2 => Dominant n^2, dolayısıyla big-o gösterimi : O(n^2)
+yukarıdaki aşamalardaki işlemler n defa tekrar edildiğine göre,
+n * [(n-2) + (n-3) + ( n-4) + 1]
+= n* (3n-8) = 3n^2 -8n = O(n^2)
+
+
+Array zaten sort edilmişse best case olurdu,  ve time complexity = O(n) (linear),
+Worst Case, artarak giden bir array'i azalarak giden şekilde sıralamak olurdu. Bu durumda her bir eleman, kalan tüm elemanlarla kıyaslanırdı. 
+Öyleyse her n'nci elemanın n-1 sayıda kıyası yapılırdı. n*(n-1) = n2-n, dominant olan n^2, dolayısıyla Worst case time complexity = O(n^2)
+Aynı zamanda Average Case ( tamamen rastgele artan, azalan karışık bir array)'in time complexity'si de O(n^2). 
 
 Time Complexity: Dizi sıralandıktan sonra 18 sayısı aşağıdaki case'lerden hangisinin kapsamına girer? Yazınız
 
@@ -22,3 +39,12 @@ Best case: Aradığımız sayının dizinin en başında olması.
 Average Case kapsamına girer, çünkü sıralanmış dizide 18 ortaya denk gelmekte. 
 
 [7,3,5,8,2,9,4,15,6] dizisinin Selection Sort'a göre ilk 4 adımını yazınız.
+
+Step 1: İlk elemanı minimum varsay. Minimum değeri ikinci elemanla kıyasla. İkinci eleman daha küçükse onu minimum kabul et ve üçüncü elemanla kıyasla.
+Bu şekilde array sonlanana kadar devam et ve başka hiçbir işlem yapma. => minimum = 2
+Step 2: minimum değer ile ilk elemanın yerini değiştir: [ 2,3,5,8,7,9,4,15,6]
+Her bir yinelemede sort edilmiş elemanları( şu anda yalnızca 2) pas geç; sort edilmemiş kısımdan indexle. Tüm elemanlar sıralanana kadar bunu tekrarla.
+[2,3,4,8,7,9,5,15,6]
+[2,3,4,5,7,9,8,15,6]
+[2,3,4,5,6,9,8,15,7]
+[2,3,4,5,6,7,8,15,9]
